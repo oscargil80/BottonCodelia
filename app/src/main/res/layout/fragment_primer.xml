@@ -7,12 +7,13 @@
     android:background="@color/white"
     tools:context=".primerFragment">
 
-    <TextView
-        android:layout_width="match_parent"
+    <Button
+        android:id="@+id/notifi"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Primer Fragmento"
-        android:textSize="45sp"
-        android:textColor="@color/black"
+        android:textSize="25sp"
+        android:textColor="@color/green_light2"
         android:textAlignment="center"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
@@ -20,6 +21,8 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         />
+
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

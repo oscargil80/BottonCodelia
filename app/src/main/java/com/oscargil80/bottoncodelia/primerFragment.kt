@@ -1,59 +1,73 @@
 package com.oscargil80.bottoncodelia
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.content.Context
+import android.graphics.Color
+import android.graphics.LightingColorFilter
+import android.hardware.lights.Light
+import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
+import com.oscargil80.bottoncodelia.databinding.FragmentPrimerBinding
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [primerFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class primerFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    private var _binding:FragmentPrimerBinding? = null
+    private val binding get() = _binding!!
+
+    private val channelID = "channelID"
+    private val channelName = "channelName"
+    private val notificacionID = 0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_primer, container, false)
+    ): View{
+        _binding = FragmentPrimerBinding.inflate(inflater, container, false)
+
+        return binding.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment primerFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            primerFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+
+        createNotificationChannel()
+        val notification = NotificationCompat.Builder(requireContext(), channelID).also{
+            it.setContentTitle("SAAD")
+            it.setContentText("SAAD NOTIFICA QUE TIENE NUEVO MENSAJE, DEBE PRESNTAR CREDENCIALES PARA CONCRETAR LA COMPRA")
+            it.setSmallIcon(R.drawable.ic_rojo_message)
+            it.setPriority(NotificationCompat.PRIORITY_MAX)
+        }.build()
+
+        val notificationManager: NotificationManagerCompat = NotificationManagerCompat.from(requireContext())
+
+        binding.notifi.setOnClickListener {
+           notificationManager.notify(notificacionID, notification)
+        }
+
+    }
+
+    private fun createNotificationChannel() {
+      if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+          val importance : Int = NotificationManager.IMPORTANCE_HIGH
+
+          val channel = NotificationChannel(channelID, channelName, importance).apply {
+              //LightingColorFilter = Color.RED
+              enableLights(true)
+          }
+
+          val manager:NotificationManager = activity?.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+          manager.createNotificationChannel(channel)
+
+      }
     }
 }
